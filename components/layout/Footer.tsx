@@ -30,6 +30,7 @@ const Footer = () => {
             <ul className="space-y-2.5">
               {[
                 { label: "AI Humanizer", path: "/#humanizer" },
+                { label: "Study Tools", path: "/study-tools" },
                 { label: "Pricing", path: "/pricing" },
                 { label: "Sitemap", path: "/sitemap" },
               ].map((item) => (
