@@ -1,40 +1,32 @@
-"use client";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import Hero from "@/components/home/Hero";
-import HumanizerTool from "@/components/home/HumanizerTool";
-import HowItWorks from "@/components/home/HowItWorks";
-import Features from "@/components/home/Features";
-import Testimonials from "@/components/home/Testimonials";
-import FAQ from "@/components/home/FAQ";
-import CTABanner from "@/components/home/CTABanner";
-import AIDetectors from "@/components/home/AIDetectors";
-import TrustedInstitutions from "@/components/home/TrustedInstitutions";
-import ParticleBackground from "@/components/home/ParticleBackground";
-import AnnouncementBar from "@/components/home/AnnouncementBar";
-import BeforeAfterShowcase from "@/components/home/BeforeAfterShowcase";
+import Home from "./home";
 
-const Index = () => {
-  return (
-    <div className="min-h-screen bg-background relative">
-      <ParticleBackground />
-      <AnnouncementBar />
-      <Navbar />
-      <main className="relative z-10">
-        <Hero />
-        <HumanizerTool />
-        <BeforeAfterShowcase />
-        <HowItWorks />
-        <AIDetectors />
-        <Features />
-        <TrustedInstitutions />
-        <Testimonials />
-        <FAQ />
-        <CTABanner />
-      </main>
-      <Footer />
-    </div>
-  );
+export const metadata = {
+  title: "Best And Free AI Humanizer Tool Online | Dev AI Humanizer",
+  description:
+    "Convert AI-generated text into natural, human-like content instantly with our best and free AI humanizer tool online. Bypass AI detectors, improve readability & boost SEO with DevAI Humanizer.",
+  keywords: [
+    "AI humanizer",
+    "humanize AI text",
+    "AI to human text",
+    "bypass AI detector",
+    "AI content tool",
+    "SEO content tool",
+  ],
+  alternates: {
+    canonical: "https://devaihumanizer.com/",
+  },
+  openGraph: {
+    title: "Best And Free AI Humanizer Tool Online | Dev AI Humanizer",
+    description:
+      "Convert AI-generated text into natural, human-like content instantly.",
+    url: "https://devaihumanizer.com/",
+    siteName: "Dev AI Humanizer",
+    type: "website",
+  },
 };
 
-export default Index;
+const Homepage = () => {
+  return <Home />;
+};
+
+export default Homepage;
