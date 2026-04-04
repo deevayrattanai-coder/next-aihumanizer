@@ -6,6 +6,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }) {
+  console.log("SERVER params.slug:", params.slug);
   const { data: post } = await supabase
     .from("blog_posts")
     .select(
@@ -55,5 +56,6 @@ export async function generateMetadata({
 }
 
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
+  console.log("CLIENT params.slug:", params.slug);
   return <BlogPostClient slug={params.slug} />;
 }
