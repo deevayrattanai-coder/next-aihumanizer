@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,8 +25,7 @@ interface BlogPost {
   created_at: string;
 }
 
-const BlogPostClient = () => {
-  const { slug } = useParams<{ slug: string }>();
+const BlogPostClient = ({ slug }: { slug: string }) => {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -43,40 +41,9 @@ const BlogPostClient = () => {
       if (data) setPost(data);
       setLoading(false);
     };
+
     fetchPost();
   }, [slug]);
-
-  useEffect(() => {
-    if (post) {
-      document.title = post.meta_title || post.title;
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc)
-        metaDesc.setAttribute("content", post.meta_description || post.excerpt);
-
-      // JSON-LD Article schema
-      const existingScript = document.querySelector("script[data-seo-jsonld]");
-      if (existingScript) existingScript.remove();
-      const script = document.createElement("script");
-      script.type = "application/ld+json";
-      script.setAttribute("data-seo-jsonld", "true");
-      script.textContent = JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Article",
-        headline: post.title,
-        description: post.meta_description || post.excerpt,
-        image: post.featured_image || undefined,
-        datePublished: post.published_at || post.created_at,
-        publisher: { "@type": "Organization", name: "DevAIHumanizer" },
-        url: `https://devaihumanizer.com/blog/${post.slug}`,
-      });
-      document.head.appendChild(script);
-
-      return () => {
-        const s = document.querySelector("script[data-seo-jsonld]");
-        if (s) s.remove();
-      };
-    }
-  }, [post]);
 
   if (loading) {
     return (
@@ -138,7 +105,7 @@ const BlogPostClient = () => {
           >
             <Image
               src={post.featured_image}
-              alt={post?.featured_image_alt || post.title}
+              alt={post.featured_image_alt || post.title}
               className="w-full aspect-video object-cover"
               width={800}
               height={450}
@@ -218,7 +185,21 @@ const BlogPostClient = () => {
             </div>
           </div>
         </motion.div>
+
+        {/* Bottom Banner Image */}
+        {post.featured_image && (
+          <div className="mt-12 md:mt-16 rounded-2xl overflow-hidden">
+            <Image
+              src={post.featured_image}
+              alt={post.featured_image_alt || post.title}
+              className="w-full aspect-video object-cover rounded-2xl"
+              width={800}
+              height={450}
+            />
+          </div>
+        )}
       </article>
+
       <Footer />
     </div>
   );
