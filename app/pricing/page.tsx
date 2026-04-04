@@ -7,6 +7,14 @@ export const metadata = {
   alternates: {
     canonical: "https://devaihumanizer.com/pricing",
   },
+  openGraph: {
+    title: "DevAI Humanizer Pricing | Affordable AI Humanizer Plans",
+    description:
+      "Explore flexible pricing plans for DevAI Humanizer. Get affordable access to powerful AI humanization tools for content, SEO, and writing needs.",
+    url: "https://devaihumanizer.com/pricing",
+    siteName: "Dev AI Humanizer",
+    type: "website",
+  },
 };
 
 const Pricing = () => {

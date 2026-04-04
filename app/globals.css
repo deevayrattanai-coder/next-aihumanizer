@@ -243,3 +243,20 @@
   pointer-events: none;
   height: 0;
 }
+
+.ProseMirror,
+.ProseMirror * {
+  color: white !important;
+}
+
+/* Fix Tiptap editor text color */
+
+.ProseMirror p,
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror h4,
+.ProseMirror li,
+.ProseMirror blockquote {
+ color: white !important;
+}
