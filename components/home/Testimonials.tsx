@@ -40,6 +40,20 @@ const fallbackTestimonials: TestimonialData[] = [
     text: "We tested every humanizer on the market. DevAIHumanizer is the only one that consistently bypasses GPTZero and Turnitin while maintaining quality.",
     rating: 5,
   },
+  {
+    id: "4",
+    name: "Michael Thompson",
+    role: "SEO Specialist",
+    text: "DevAIHumanizer has been a game-changer for our content strategy. The humanized content performs significantly better in search rankings.",
+    rating: 5,
+  },
+  {
+    id: "5",
+    name: "Michael Rodriguez",
+    role: "Digital Marketer",
+    text: "A text about how DevAIHumanizer has helped improve our content quality.",
+    rating: 5,
+  },
 ];
 
 const Testimonials = () => {

@@ -15,6 +15,7 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [isRecovery, setIsRecovery] = useState(false);
+  const [error, setError] = useState("");
   const { toast } = useToast();
   const router = useRouter();
 
@@ -39,16 +40,16 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password.length < 6) {
-      toast({
-        title: "Too short",
-        description: "Password must be at least 6 characters.",
-        variant: "destructive",
-      });
+
+    const errorMsg = validatePassword(password);
+    if (errorMsg) {
+      setError(errorMsg);
       return;
     }
+
     setLoading(true);
     const { error } = await supabase.auth.updateUser({ password });
+
     if (error) {
       toast({
         title: "Failed",
@@ -63,7 +64,28 @@ const ResetPassword = () => {
       });
       setTimeout(() => router.push("/login"), 2000);
     }
+
     setLoading(false);
+  };
+
+  const validatePassword = (value: string) => {
+    if (!value) return "Password is required";
+    if (value.length < 8 || value.length > 20) {
+      return "Password must be between 8 and 20 characters.";
+    }
+    if (!/[A-Z]/.test(value)) {
+      return "At least one uppercase letter required.";
+    }
+    if (!/[a-z]/.test(value)) {
+      return "At least one lowercase letter required.";
+    }
+    if (!/\d/.test(value)) {
+      return "At least one number required.";
+    }
+    if (!/[^A-Za-z0-9]/.test(value)) {
+      return "At least one special character required.";
+    }
+    return "";
   };
 
   return (
@@ -127,9 +149,38 @@ const ResetPassword = () => {
                   placeholder="••••••••"
                   required
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setPassword(value);
+                    setError(validatePassword(value));
+                  }}
                   className="bg-accent/50 border-border/50 pr-10"
                 />
+                <div className="text-xs text-muted-foreground space-y-1 mt-2">
+                  <p className={password.length >= 8 ? "text-green-500" : ""}>
+                    • 8–20 characters
+                  </p>
+                  <p className={/[A-Z]/.test(password) ? "text-green-500" : ""}>
+                    • One uppercase letter
+                  </p>
+                  <p className={/[a-z]/.test(password) ? "text-green-500" : ""}>
+                    • One lowercase letter
+                  </p>
+                  <p className={/\d/.test(password) ? "text-green-500" : ""}>
+                    • One number
+                  </p>
+                  <p
+                    className={
+                      /[^A-Za-z0-9]/.test(password) ? "text-green-500" : ""
+                    }
+                  >
+                    • One special character
+                  </p>
+                </div>
+
+                {error && (
+                  <p className="text-xs text-destructive my-1">{error}</p>
+                )}
                 <button
                   type="button"
                   onClick={() => setShowPw(!showPw)}
@@ -148,7 +199,7 @@ const ResetPassword = () => {
               size="lg"
               type="submit"
               className="w-full"
-              disabled={loading}
+              disabled={loading || !!error || !password}
             >
               {loading ? (
                 <>

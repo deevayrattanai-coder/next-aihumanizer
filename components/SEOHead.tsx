@@ -15,7 +15,7 @@ const SEOHead = ({
   title,
   description,
   canonical,
-  ogImage = "https://testhumanizer.lovable.app/og-default.jpg",
+  ogImage = "https://devaihumanizer.com/og-default.jpg",
   ogType = "website",
   jsonLd,
 }: SEOHeadProps) => {

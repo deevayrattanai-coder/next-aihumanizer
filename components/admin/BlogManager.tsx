@@ -15,6 +15,7 @@ interface BlogPost {
   meta_title: string;
   meta_description: string;
   featured_image: string;
+  featured_image_alt?: string;
   status: string;
   created_at: string;
   updated_at: string;

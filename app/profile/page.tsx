@@ -40,7 +40,7 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [pwLoading, setPwLoading] = useState(false);
-
+  const [pwError, setPwError] = useState("");
   // Humanization count
   const [totalHumanizations, setTotalHumanizations] = useState<number | null>(
     null,
@@ -66,22 +66,19 @@ const Profile = () => {
   }, [user]);
 
   const handleChangePassword = async () => {
-    if (newPassword.length < 6) {
-      toast({
-        title: "Password too short",
-        description: "Minimum 6 characters.",
-        variant: "destructive",
-      });
+    const errorMsg = validatePassword(newPassword);
+    if (errorMsg) {
+      setPwError(errorMsg);
       return;
     }
+
+    setPwError("");
     setPwLoading(true);
+
     const { error } = await supabase.auth.updateUser({ password: newPassword });
+
     if (error) {
-      toast({
-        title: "Failed",
-        description: error.message,
-        variant: "destructive",
-      });
+      setPwError(error.message);
     } else {
       toast({
         title: "Password updated",
@@ -90,6 +87,7 @@ const Profile = () => {
       setNewPassword("");
       setShowPwSection(false);
     }
+
     setPwLoading(false);
   };
 
@@ -105,6 +103,26 @@ const Profile = () => {
     pro: "Pro word limit",
     ultra: "Ultra word limit",
     enterprise: "Unlimited",
+  };
+
+  const validatePassword = (value: string) => {
+    if (!value) return "Password is required";
+    if (value.length < 8 || value.length > 20) {
+      return "Password must be between 8 and 20 characters.";
+    }
+    if (!/[A-Z]/.test(value)) {
+      return "Password must include at least one uppercase letter.";
+    }
+    if (!/[a-z]/.test(value)) {
+      return "Password must include at least one lowercase letter.";
+    }
+    if (!/\d/.test(value)) {
+      return "Password must include at least one number.";
+    }
+    if (!/[^A-Za-z0-9]/.test(value)) {
+      return "Password must include at least one special character.";
+    }
+    return "";
   };
 
   return (
@@ -160,9 +178,60 @@ const Profile = () => {
                           type={showPw ? "text" : "password"}
                           placeholder="New password"
                           value={newPassword}
-                          onChange={(e) => setNewPassword(e.target.value)}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setNewPassword(value);
+                            setPwError(validatePassword(value));
+                          }}
                           className="bg-accent/50 border-border/50 pr-10"
                         />
+
+                        <div className="text-xs text-muted-foreground space-y-1 mt-2">
+                          <p
+                            className={
+                              newPassword.length >= 8 ? "text-green-500" : ""
+                            }
+                          >
+                            • 8–20 characters
+                          </p>
+                          <p
+                            className={
+                              /[A-Z]/.test(newPassword) ? "text-green-500" : ""
+                            }
+                          >
+                            • One uppercase letter
+                          </p>
+                          <p
+                            className={
+                              /[a-z]/.test(newPassword) ? "text-green-500" : ""
+                            }
+                          >
+                            • One lowercase letter
+                          </p>
+                          <p
+                            className={
+                              /\d/.test(newPassword) ? "text-green-500" : ""
+                            }
+                          >
+                            • One number
+                          </p>
+                          <p
+                            className={
+                              /[^A-Za-z0-9]/.test(newPassword)
+                                ? "text-green-500"
+                                : ""
+                            }
+                          >
+                            • One special character
+                          </p>
+                        </div>
+
+                        {pwError && (
+                          <p className="text-xs text-destructive my-1">
+                            {pwError}
+                          </p>
+                        )}
+
                         <button
                           type="button"
                           onClick={() => setShowPw(!showPw)}

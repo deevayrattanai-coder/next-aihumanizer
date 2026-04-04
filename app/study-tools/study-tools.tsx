@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import SEOHead from "@/components/SEOHead";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -56,11 +55,6 @@ const tools = [
 const StudyToolsPage = () => {
   return (
     <div className="min-h-screen bg-background relative">
-      <SEOHead
-        title="Free Study Tools for Students — Pomodoro Timer & More | DevAIHumanizer"
-        description="Boost your productivity with free study tools including Pomodoro Timer, Study Planner, Note Summarizer, and more. All tools are free to use — no sign-up required."
-        canonical="https://testhumanizer.lovable.app/study-tools"
-      />
       <Navbar />
 
       <main className="relative z-10">

@@ -9,7 +9,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Calendar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import SEOHead from "@/components/SEOHead";
+
 import {
   Pagination,
   PaginationContent,
@@ -81,11 +81,6 @@ const BlogPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEOHead
-        title="Blog — AI Content & Humanization Tips | DevAIHumanizer"
-        description="Insights on AI content, humanization strategies, SEO tips, and the future of writing from the DevAIHumanizer team."
-        canonical="https://testhumanizer.lovable.app/blog"
-      />
       <AnnouncementBar />
       <Navbar />
       <main>

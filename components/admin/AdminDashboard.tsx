@@ -65,24 +65,32 @@ const AdminDashboard = () => {
   const [newDisplayName, setNewDisplayName] = useState("");
   const [changingName, setChangingName] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-
+  const [pwError, setPwError] = useState("");
+  const [confirmError, setConfirmError] = useState("");
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
 
   const handleChangePassword = async () => {
-    if (newPassword.length < 6) {
-      toast.error("Password must be at least 6 characters");
+    const passwordError = validatePassword(newPassword);
+    if (passwordError) {
+      setPwError(passwordError);
       return;
     }
+
     if (newPassword !== confirmPassword) {
-      toast.error("Passwords do not match");
+      setConfirmError("Passwords do not match");
       return;
     }
+
+    setPwError("");
+    setConfirmError("");
+
     setChangingPassword(true);
     const { data, error } = await supabase.functions.invoke("admin-password", {
       body: { new_password: newPassword },
     });
+
     if (error || (data && data.error)) {
       toast.error(data?.error || error?.message || "Failed to change password");
     } else {
@@ -90,6 +98,7 @@ const AdminDashboard = () => {
       setNewPassword("");
       setConfirmPassword("");
     }
+
     setChangingPassword(false);
   };
 
@@ -145,6 +154,26 @@ const AdminDashboard = () => {
     { id: "jobs", label: "Jobs", icon: Briefcase },
     { id: "health", label: "System Health", icon: Activity, section: "System" },
   ];
+
+  const validatePassword = (value: string) => {
+    if (!value) return "Password is required";
+    if (value.length < 8 || value.length > 20) {
+      return "Password must be 8–20 characters.";
+    }
+    if (!/[A-Z]/.test(value)) {
+      return "Must include uppercase letter.";
+    }
+    if (!/[a-z]/.test(value)) {
+      return "Must include lowercase letter.";
+    }
+    if (!/\d/.test(value)) {
+      return "Must include a number.";
+    }
+    if (!/[^A-Za-z0-9]/.test(value)) {
+      return "Must include a special character.";
+    }
+    return "";
+  };
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -248,10 +277,19 @@ const AdminDashboard = () => {
                           id="new-password"
                           type={showNewPw ? "text" : "password"}
                           value={newPassword}
-                          onChange={(e) => setNewPassword(e.target.value)}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setNewPassword(value);
+                            setPwError(validatePassword(value));
+                          }}
                           placeholder="Min 6 characters"
                           className="pr-10"
                         />
+                        {pwError && (
+                          <p className="text-xs text-destructive my-1">
+                            {pwError}
+                          </p>
+                        )}
                         <button
                           type="button"
                           onClick={() => setShowNewPw(!showNewPw)}
@@ -272,9 +310,22 @@ const AdminDashboard = () => {
                           id="confirm-password"
                           type={showConfirmPw ? "text" : "password"}
                           value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setConfirmPassword(value);
+                            if (newPassword !== value) {
+                              setConfirmError("Passwords do not match");
+                            } else {
+                              setConfirmError("");
+                            }
+                          }}
                           className="pr-10"
                         />
+                        {confirmError && (
+                          <p className="text-xs text-destructive my-1">
+                            {confirmError}
+                          </p>
+                        )}
                         <button
                           type="button"
                           onClick={() => setShowConfirmPw(!showConfirmPw)}
@@ -290,7 +341,13 @@ const AdminDashboard = () => {
                     </div>
                     <Button
                       onClick={handleChangePassword}
-                      disabled={changingPassword}
+                      disabled={
+                        changingPassword ||
+                        !!pwError ||
+                        !!confirmError ||
+                        !newPassword ||
+                        !confirmPassword
+                      }
                       size="sm"
                     >
                       {changingPassword ? "Updating…" : "Update Password"}
