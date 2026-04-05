@@ -9,7 +9,7 @@ import { ArrowLeft, Calendar, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import DOMPurify from "dompurify";
-import { usePathname } from "next/navigation";
+
 interface BlogPost {
   id: string;
   title: string;
@@ -28,9 +28,6 @@ interface BlogPost {
 const BlogPostClient = ({ slug }: { slug: string }) => {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const pathname = usePathname(); // → "/blog/your-post-slug"
-  const slug1 = pathname.split("/").pop();
-  console.log("Current slug from pathname:", slug1);
   console.log("Fetched post:", post, slug);
   useEffect(() => {
     const fetchPost = async () => {
