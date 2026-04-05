@@ -63,7 +63,7 @@ const BlogPostClient = ({ slug }: { slug: string }) => {
         <Navbar />
         <div className="text-center py-32">
           <h1 className="text-2xl font-display font-bold text-foreground mb-2">
-            Blog Post Not Found
+            Post Not Found
           </h1>
           <p className="text-muted-foreground mb-6">
             This blog post does not exist or has not been published yet.
