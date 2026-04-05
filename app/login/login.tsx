@@ -281,16 +281,48 @@ const Login = () => {
                 }`}
               />
 
-              {errors.password && (
-                <div className="mt-2 text-xs text-red-500 space-y-1">
-                  <p>{errors.password}</p>
+              {/* ✅ Show live checklist only on signup, error message on login */}
+              {isSignup ? (
+                <div className="text-xs text-muted-foreground space-y-1 mt-2">
+                  <p
+                    className={
+                      password.length >= 8 && password.length <= 20
+                        ? "text-green-500"
+                        : ""
+                    }
+                  >
+                    • 8–20 characters
+                  </p>
+                  <p className={/[A-Z]/.test(password) ? "text-green-500" : ""}>
+                    • One uppercase letter
+                  </p>
+                  <p className={/[a-z]/.test(password) ? "text-green-500" : ""}>
+                    • One lowercase letter
+                  </p>
+                  <p className={/\d/.test(password) ? "text-green-500" : ""}>
+                    • One number
+                  </p>
+                  <p
+                    className={
+                      /[^A-Za-z0-9]/.test(password) ? "text-green-500" : ""
+                    }
+                  >
+                    • One special character
+                  </p>
                 </div>
+              ) : (
+                <>
+                  {errors.password && (
+                    <div className="mt-2 text-xs text-red-500 space-y-1">
+                      <p>{errors.password}</p>
+                    </div>
+                  )}
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Use 8–20 characters with uppercase, lowercase, number, and
+                    special character.
+                  </p>
+                </>
               )}
-
-              <p className="text-xs text-muted-foreground mt-2">
-                Use 8–20 characters with uppercase, lowercase, number, and
-                special character.
-              </p>
 
               <button
                 type="button"

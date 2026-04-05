@@ -252,6 +252,12 @@ const BlogEditor = ({ post, onSave, onCancel }: Props) => {
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    if (file.size === 0) {
+      toast.error("File is empty, please select a valid image");
+      return;
+    }
+
     if (!file.type.startsWith("image/")) {
       toast.error("Please select an image file");
       return;
