@@ -1,18 +1,20 @@
 import { supabase } from "@/integrations/supabase/client";
 import BlogPostClient from "./BlogPostClient";
 
+// ← params is now a Promise in Next.js 15
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  console.log("SERVER params.slug:", params.slug);
+  const { slug } = await params;
+
   const { data: post } = await supabase
     .from("blog_posts")
     .select(
       "title, meta_title, meta_description, excerpt, featured_image, slug, published_at, created_at",
     )
-    .eq("slug", params.slug)
+    .eq("slug", slug)
     .eq("status", "published")
     .maybeSingle();
 
@@ -55,7 +57,13 @@ export async function generateMetadata({
   };
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  console.log("CLIENT params.slug:", params.slug);
-  return <BlogPostClient slug={params.slug} />;
+// ← same fix for the page component
+export default async function BlogPostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
+  return <BlogPostClient slug={slug} />;
 }

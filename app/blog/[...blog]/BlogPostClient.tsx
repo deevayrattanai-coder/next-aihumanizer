@@ -76,7 +76,7 @@ const BlogPostClient = ({ slug }: { slug: string }) => {
       </div>
     );
   }
-
+  console.log("Fetched post:", post);
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
