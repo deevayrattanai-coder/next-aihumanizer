@@ -185,19 +185,6 @@ const BlogPostClient = ({ slug }: { slug: string }) => {
             </div>
           </div>
         </motion.div>
-
-        {/* Bottom Banner Image */}
-        {post.featured_image && (
-          <div className="mt-12 md:mt-16 rounded-2xl overflow-hidden">
-            <Image
-              src={post.featured_image}
-              alt={post.featured_image_alt || post.title}
-              className="w-full aspect-video object-cover rounded-2xl"
-              width={800}
-              height={450}
-            />
-          </div>
-        )}
       </article>
 
       <Footer />
