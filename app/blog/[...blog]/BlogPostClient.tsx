@@ -9,7 +9,7 @@ import { ArrowLeft, Calendar, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import DOMPurify from "dompurify";
-
+import { usePathname } from "next/navigation";
 interface BlogPost {
   id: string;
   title: string;
@@ -28,7 +28,10 @@ interface BlogPost {
 const BlogPostClient = ({ slug }: { slug: string }) => {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
-
+  const pathname = usePathname(); // → "/blog/your-post-slug"
+  const slug1 = pathname.split("/").pop();
+  console.log("Current slug from pathname:", slug1);
+  console.log("Fetched post:", post, slug);
   useEffect(() => {
     const fetchPost = async () => {
       const { data } = await supabase
@@ -63,7 +66,7 @@ const BlogPostClient = ({ slug }: { slug: string }) => {
         <Navbar />
         <div className="text-center py-32">
           <h1 className="text-2xl font-display font-bold text-foreground mb-2">
-            Post Not Found
+            Blog Post Not Found
           </h1>
           <p className="text-muted-foreground mb-6">
             This blog post does not exist or has not been published yet.

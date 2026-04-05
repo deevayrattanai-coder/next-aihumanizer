@@ -1,7 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import BlogPostClient from "./BlogPostClient";
 
-// ← params is now a Promise in Next.js 15
 export async function generateMetadata({
   params,
 }: {
